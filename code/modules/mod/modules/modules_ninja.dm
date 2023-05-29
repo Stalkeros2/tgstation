@@ -293,7 +293,8 @@
 	desc = "A once-common module, this technology went unfortunately out of fashion around the safer regions of space; \
 		and right into the research networks of the Periphery, and subsequently into the hands of the Spider Clan. This hooks into the suit's spine, \
 		capable of capturing and displaying all possible biometric data of the wearer; sleep, nutrition, fitness, fingerprints, \
-		and even useful information such as their overall health and wellness."
+		and even useful information such as their overall health and wellness. \
+		This particular module includes a self-calibrating system clock, and operation ID indicator."
 	show_time = TRUE
 
 ///Energy Net - Ensnares enemies in a net that prevents movement.

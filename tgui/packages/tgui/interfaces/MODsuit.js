@@ -213,6 +213,7 @@ const HealthAnalyzer = (props, context) => {
 const StatusReadout = (props, context) => {
   const {
     active,
+    show_time,
     statustime,
     statusid,
     statushealth,
@@ -229,18 +230,20 @@ const StatusReadout = (props, context) => {
   } = props;
   return (
     <>
-      <Stack textAlign="center">
-        <Stack.Item grow>
-          <Section title="Operation Time">
-            {active ? statustime : '00:00:00'}
-          </Section>
-        </Stack.Item>
-        <Stack.Item grow>
-          <Section title="Operation Number">
-            {active ? statusid || '0' : '???'}
-          </Section>
-        </Stack.Item>
-      </Stack>
+      {!!show_time && (
+        <Stack textAlign="center">
+          <Stack.Item grow>
+            <Section title="Operation Time">
+              {active ? statustime : '00:00:00'}
+            </Section>
+          </Stack.Item>
+          <Stack.Item grow>
+            <Section title="Operation Number">
+              {active ? statusid || '0' : '???'}
+            </Section>
+          </Stack.Item>
+        </Stack>
+      )}
       <Section title="Health">
         <ProgressBar
           value={active ? statushealth / statusmaxhealth : 0}

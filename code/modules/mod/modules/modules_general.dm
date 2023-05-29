@@ -596,3 +596,47 @@
 
 /obj/item/mod/module/signlang_radio/on_suit_deactivation(deleting = FALSE)
 	REMOVE_TRAIT(mod.wearer, TRAIT_CAN_SIGN_ON_COMMS, MOD_TRAIT)
+
+///Status Readout - Puts a lot of information including health, nutrition, fingerprints, temperature to the suit TGUI.
+/obj/item/mod/module/status_readout
+	name = "MOD status readout module"
+	desc = "A once-common module, this technology went unfortunately out of fashion around the safer regions of space; \
+		and right into the research networks of the Periphery. This hooks into the suit's spine, \
+		capable of capturing and displaying all possible biometric data of the wearer; sleep, nutrition, fitness, fingerprints, \
+		and even useful information such as their overall health and wellness."
+	icon_state = "status"
+	complexity = 1
+	use_power_cost = DEFAULT_CHARGE_DRAIN * 0.1
+	incompatible_modules = list(/obj/item/mod/module/status_readout)
+	tgui_id = "status_readout"
+	/// Does it show the round ID ("operation number") and shift time
+	var/show_time = FALSE
+
+/obj/item/mod/module/status_readout/add_ui_data()
+	. = ..()
+	.["show_time"] = show_time
+	.["statustime"] = station_time_timestamp()
+	.["statusid"] = GLOB.round_id
+	.["statushealth"] = mod.wearer?.health || 0
+	.["statusmaxhealth"] = mod.wearer?.getMaxHealth() || 0
+	.["statusbrute"] = mod.wearer?.getBruteLoss() || 0
+	.["statusburn"] = mod.wearer?.getFireLoss() || 0
+	.["statustoxin"] = mod.wearer?.getToxLoss() || 0
+	.["statusoxy"] = mod.wearer?.getOxyLoss() || 0
+	.["statustemp"] = mod.wearer?.bodytemperature || 0
+	.["statusnutrition"] = mod.wearer?.nutrition || 0
+	.["statusfingerprints"] = mod.wearer ? md5(mod.wearer.dna.unique_identity) : null
+	.["statusdna"] = mod.wearer?.dna.unique_enzymes
+	.["statusviruses"] = null
+	if(!length(mod.wearer?.diseases))
+		return
+	var/list/viruses = list()
+	for(var/datum/disease/virus as anything in mod.wearer.diseases)
+		var/list/virus_data = list()
+		virus_data["name"] = virus.name
+		virus_data["type"] = virus.spread_text
+		virus_data["stage"] = virus.stage
+		virus_data["maxstage"] = virus.max_stages
+		virus_data["cure"] = virus.cure_text
+		viruses += list(virus_data)
+	.["statusviruses"] = viruses
